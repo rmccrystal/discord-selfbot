@@ -3,6 +3,7 @@ package main
 import (
 	"discord-selfbot/pkg/commands"
 	"discord-selfbot/pkg/selfbot"
+	"flag"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"os"
@@ -10,32 +11,38 @@ import (
 	"syscall"
 )
 
-const (
-	ConfigFile = "config.json"
+var (
+	debug      bool
+	configFile string
 )
 
-func main()  {
+func main() {
+	// Parse flags
+	flag.BoolVar(&debug, "debug", false, "Enables debug mode")
+	flag.StringVar(&configFile, "config", "config.json", "Specifies the config file")
+
+	flag.Parse()
+
 	// Init the logger
 	log.SetFormatter(&log.TextFormatter{
 		ForceColors:   true,
 		FullTimestamp: false,
 	})
-	log.SetLevel(log.DebugLevel)
+	log.SetLevel(log.InfoLevel)
 
-	// Open and read config file
-	configFile, err := os.Open(ConfigFile)
-	if err != nil {
-		log.Fatalf("Error opening config file %s: %s", ConfigFile, err)
+	if debug {
+		log.SetLevel(log.DebugLevel)
 	}
 
-	configJson, err := ioutil.ReadAll(configFile)
+	// Open and read config file
+	configJson, err := ioutil.ReadFile(configFile)
 	if err != nil {
-		log.Fatalf("Error reading config file %s: %s", ConfigFile, err)
+		log.Fatalf("Error reading config file %s: %s", configFile, err)
 	}
 
 	config, err := selfbot.NewConfigFromJson(configJson)
 	if err != nil {
-		log.Fatalf("Error parsing config file %s: %s", ConfigFile, err)
+		log.Fatalf("Error parsing config file %s: %s", configFile, err)
 	}
 
 	commandList := commands.InitCommands()
