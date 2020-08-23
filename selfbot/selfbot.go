@@ -2,6 +2,7 @@ package selfbot
 
 import (
 	"fmt"
+	"github.com/Krognol/go-wolfram"
 	"github.com/bwmarrin/discordgo"
 	log "github.com/sirupsen/logrus"
 )
@@ -9,40 +10,50 @@ import (
 // Selfbot represents all information requred to run a selfbot. Multiple selfbots
 // can be created with this struct
 type Selfbot struct {
-	session *discordgo.Session
-	user    *discordgo.User
-	config  Config
-	log     *log.Entry
+	Session       *discordgo.Session
+	User          *discordgo.User
+	Config        Config
+	CommandList   CommandList
+	Log           *log.Entry
+	WolframClient *wolfram.Client
 }
 
-func NewSelfbot(config Config) (Selfbot, error) {
-	// Create a new session
+func NewSelfbot(config Config, commands CommandList) (Selfbot, error) {
+	// Create a new Session
 	session, err := discordgo.New(config.Token)
 	if err != nil {
 		return Selfbot{}, err
 	}
 
-	// Open the session
+	// Open the Session
 	if err = session.Open(); err != nil {
 		return Selfbot{}, err
 	}
 
-	// get local user
+	// get local User
 	user, err := session.User("@me")
 	if err != nil {
-		return Selfbot{}, fmt.Errorf("error getting local user: %s", user)
+		return Selfbot{}, fmt.Errorf("error getting local User: %s", user)
 	}
 
-	logger := log.WithFields(log.Fields{"user": user.Username + "#" + user.Discriminator})
+	logger := log.WithFields(log.Fields{"User": user.Username + "#" + user.Discriminator})
 
 	logger.Infof("Started selfbot")
 
+	var wolframClient *wolfram.Client
+	// only set the client if there is an api key
+	if config.WolframAlphaAppID != "" {
+		wolframClient = &wolfram.Client{AppID: config.WolframAlphaAppID}
+	}
+
 	// create the selfbot struct
 	bot := Selfbot{
-		session: session,
-		user:    user,
-		config:  config,
-		log:     logger,
+		Session:       session,
+		User:          user,
+		Config:        config,
+		CommandList:   commands,
+		Log:           logger,
+		WolframClient: wolframClient,
 	}
 
 	// init the handlers
@@ -54,6 +65,6 @@ func NewSelfbot(config Config) (Selfbot, error) {
 }
 
 func (bot *Selfbot) Close() {
-	bot.log.Debugf("Closing session")
-	_ = bot.session.Close()
+	bot.Log.Debugf("Closing Session")
+	_ = bot.Session.Close()
 }

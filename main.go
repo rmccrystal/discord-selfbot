@@ -1,6 +1,7 @@
 package main
 
 import (
+	"discord-selfbot/commands"
 	"discord-selfbot/selfbot"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
@@ -38,7 +39,9 @@ func main()  {
 		log.Fatalf("Error parsing config file %s: %s", ConfigFile, err)
 	}
 
-	bot, err := selfbot.NewSelfbot(config)
+	commandList := commands.InitCommands()
+
+	bot, err := selfbot.NewSelfbot(config, commandList)
 
 	if err != nil {
 		log.Errorf("Error creating selfbot: %s", bot)

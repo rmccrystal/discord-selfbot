@@ -1,6 +1,6 @@
-package selfbot
+package commands
 
-// A translation from letter to emoji sorted by most to least desireable
+// A translation from letter to emoji sorted by most to least desirable
 // Taken from https://github.com/appu1232/Discord-Selfbot/blob/master/cogs/fun.py#L45
 var EmojiDict = map[rune][]string {
 	'a': {"🇦", "🅰", "🍙", "🔼", "4⃣"},
