@@ -14,6 +14,7 @@ import (
 )
 
 const ConfigOutput = "../../config.example.json"
+
 var CommandListOutput = os.Stdout
 
 func main() {
@@ -34,8 +35,11 @@ func generateCommandMD(commandList selfbot.CommandList) string {
 	for _, command := range commandList.Commands {
 		md += fmt.Sprintf("### `%s`\n\n"+
 			"Description: `%s`\n\n"+
-			"Usage: `%s`\n\n" +
-			"Aliases: `%s`\n\n", command.Name, command.Description, command.Usage, strings.Join(command.Aliases, ", "))
+			"Usage: `%s`\n\n", command.Name, command.Description, command.Usage)
+
+		if len(command.Aliases) > 0 {
+			md += fmt.Sprintf("Aliases: `%s`\n\n", strings.Join(command.Aliases, ", "))
+		}
 	}
 
 	return md

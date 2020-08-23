@@ -19,8 +19,6 @@ Description: `Turns your text to ascii art and prints it to the chat`
 
 Usage: `ascii <text>`
 
-Aliases: ``
-
 ### `react`
 
 Description: `Reacts custom text to the most recent message`
