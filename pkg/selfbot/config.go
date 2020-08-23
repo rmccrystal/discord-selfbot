@@ -11,7 +11,6 @@ type Config struct {
 	Token             string `json:"token"`
 	Prefix            string `json:"prefix"`
 	DefaultAsciiFont  string `json:"default_ascii_font"`
-	WolframAlphaAppID string `json:"wolfram_alpha_app_id"`
 }
 
 func NewConfigDefault(token string) Config {
