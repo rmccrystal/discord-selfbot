@@ -2,7 +2,6 @@ package selfbot
 
 import (
 	"fmt"
-	"github.com/Krognol/go-wolfram"
 	"github.com/bwmarrin/discordgo"
 	log "github.com/sirupsen/logrus"
 )
@@ -15,7 +14,6 @@ type Selfbot struct {
 	Config        Config
 	CommandList   CommandList
 	Log           *log.Entry
-	WolframClient *wolfram.Client
 }
 
 func NewSelfbot(config Config, commands CommandList) (Selfbot, error) {
@@ -40,12 +38,6 @@ func NewSelfbot(config Config, commands CommandList) (Selfbot, error) {
 
 	logger.Infof("Started selfbot")
 
-	var wolframClient *wolfram.Client
-	// only set the client if there is an api key
-	if config.WolframAlphaAppID != "" {
-		wolframClient = &wolfram.Client{AppID: config.WolframAlphaAppID}
-	}
-
 	// create the selfbot struct
 	bot := Selfbot{
 		Session:       session,
@@ -53,7 +45,6 @@ func NewSelfbot(config Config, commands CommandList) (Selfbot, error) {
 		Config:        config,
 		CommandList:   commands,
 		Log:           logger,
-		WolframClient: wolframClient,
 	}
 
 	// init the handlers
