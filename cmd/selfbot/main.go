@@ -46,7 +46,6 @@ func main() {
 	}
 
 	commandList := commands.InitCommands()
-
 	bot, err := selfbot.NewSelfbot(config, commandList)
 
 	if err != nil {
