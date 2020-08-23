@@ -49,7 +49,7 @@ func main() {
 	bot, err := selfbot.NewSelfbot(config, commandList)
 
 	if err != nil {
-		log.Errorf("Error creating selfbot: %s", bot)
+		log.Errorf("Error creating selfbot: %s", err)
 		return
 	}
 
