@@ -1,6 +1,6 @@
 package commands
 
-import "discord-selfbot/selfbot"
+import "discord-selfbot/pkg/selfbot"
 
 // InitCommands creates a command list which is used by the selfbot.
 // All commands should be added to the command list here
@@ -12,7 +12,7 @@ func InitCommands() selfbot.CommandList {
 		Aliases:     []string{"d"},
 		Run:         deleteCommand,
 		Description: "Deletes the past n commands",
-		Usage: "delete [messageCount]",
+		Usage:       "delete [messageCount]",
 		MinArgs:     0,
 	})
 	list.AddCommand(selfbot.Command{

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"discord-selfbot/commands"
-	"discord-selfbot/selfbot"
+	"discord-selfbot/pkg/commands"
+	"discord-selfbot/pkg/selfbot"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"os"
@@ -11,7 +11,6 @@ import (
 )
 
 const (
-	CommandPrefix = ">"
 	ConfigFile = "config.json"
 )
 

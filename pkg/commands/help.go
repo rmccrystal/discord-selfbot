@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"discord-selfbot/selfbot"
+	"discord-selfbot/pkg/selfbot"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 )
