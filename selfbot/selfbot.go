@@ -40,11 +40,11 @@ func NewSelfbot(config Config, commands CommandList) (Selfbot, error) {
 
 	// create the selfbot struct
 	bot := Selfbot{
-		Session:       session,
-		User:          user,
-		Config:        config,
-		CommandList:   commands,
-		Log:           logger,
+		Session:     session,
+		User:        user,
+		Config:      config,
+		CommandList: commands,
+		Log:         logger,
 	}
 
 	// init the handlers
