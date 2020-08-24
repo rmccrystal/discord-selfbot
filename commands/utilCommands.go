@@ -1,10 +1,10 @@
 package commands
 
 import (
-	"discord-selfbot/pkg/selfbot"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"github.com/common-nighthawk/go-figure"
+	"github.com/rmccrystal/discord-selfbot/selfbot"
 	"github.com/sirupsen/logrus"
 	"strconv"
 	"strings"

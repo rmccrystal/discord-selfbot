@@ -1,9 +1,9 @@
 package commands
 
 import (
-	"discord-selfbot/pkg/selfbot"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"github.com/rmccrystal/discord-selfbot/selfbot"
 )
 
 func helpCommand(bot *selfbot.Selfbot, args []string, message *discordgo.Message) (userError, discordError error) {

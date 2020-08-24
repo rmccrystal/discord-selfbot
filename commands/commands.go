@@ -1,6 +1,6 @@
 package commands
 
-import "discord-selfbot/pkg/selfbot"
+import "github.com/rmccrystal/discord-selfbot/selfbot"
 
 // InitCommands creates a command list which is used by the selfbot.
 // All commands should be added to the command list here

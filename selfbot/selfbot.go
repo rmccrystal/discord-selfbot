@@ -6,14 +6,14 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// Selfbot represents all information requred to run a selfbot. Multiple selfbots
+// Selfbot represents all information required to run a selfbot. Multiple selfbots
 // can be created with this struct
 type Selfbot struct {
-	Session       *discordgo.Session
-	User          *discordgo.User
-	Config        Config
-	CommandList   CommandList
-	Log           *log.Entry
+	Session     *discordgo.Session
+	User        *discordgo.User
+	Config      Config
+	CommandList CommandList
+	Log         *log.Entry
 }
 
 func NewSelfbot(config Config, commands CommandList) (Selfbot, error) {

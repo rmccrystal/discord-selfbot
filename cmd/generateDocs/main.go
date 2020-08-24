@@ -4,10 +4,10 @@ package main
 
 import (
 	"bytes"
-	"discord-selfbot/pkg/commands"
-	"discord-selfbot/pkg/selfbot"
 	"encoding/json"
 	"fmt"
+	"github.com/rmccrystal/discord-selfbot/commands"
+	"github.com/rmccrystal/discord-selfbot/selfbot"
 	"io/ioutil"
 	"os"
 	"strings"

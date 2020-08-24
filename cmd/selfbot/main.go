@@ -1,9 +1,9 @@
 package main
 
 import (
-	"discord-selfbot/pkg/commands"
-	"discord-selfbot/pkg/selfbot"
 	"flag"
+	"github.com/rmccrystal/discord-selfbot/commands"
+	"github.com/rmccrystal/discord-selfbot/selfbot"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"os"
@@ -37,7 +37,7 @@ func main() {
 	// Open and read config file
 	configJson, err := ioutil.ReadFile(configFile)
 	if err != nil {
-		log.Fatalf("Error reading config file %s: %s", configFile, err)
+		log.Fatalln(err)
 	}
 
 	config, err := selfbot.NewConfigFromJson(configJson)
