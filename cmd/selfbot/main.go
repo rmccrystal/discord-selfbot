@@ -38,8 +38,8 @@ func main() {
 		log.SetLevel(log.DebugLevel)
 	}
 
-	// Generate or get config
-	var config selfbot.Config
+	// for multiple configs. if there is only one config, use configs[0]
+	configs := []selfbot.Config{{}}
 	if _, err := os.Stat(configFileName); os.IsNotExist(err) {
 		// does not exist, ask for token and generate a new file
 		reader := bufio.NewReader(os.Stdin)
@@ -50,7 +50,7 @@ func main() {
 		token = strings.TrimSpace(token)
 
 		// Create a new config
-		config = selfbot.NewConfigDefault(token)
+		configs[0] = selfbot.NewConfigDefault(token)
 
 		// Save the new config file
 		configFile, err := os.Create(configFileName)
@@ -61,26 +61,33 @@ func main() {
 		enc := json.NewEncoder(configFile)
 		enc.SetEscapeHTML(false)
 		enc.SetIndent("", "  ")
-		_ = enc.Encode(config)
+		_ = enc.Encode(configs[0])
 	} else {
 		// Open and read config file
 		configJson, err := ioutil.ReadFile(configFileName)
 		if err != nil {
 			log.Fatalln(err)
 		}
-		config, err = selfbot.NewConfigFromJson(configJson)
+		configs[0], err = selfbot.NewConfigFromJson(configJson)
 
 		if err != nil {
-			log.Fatalf("Error parsing config file %s: %s", configFileName, err)
+			// try reading multiple configs
+			configs, err = selfbot.NewConfigsFromJson(configJson)
+			if err != nil {
+				log.Fatalf("Error parsing config file %s: %s", configFileName, err)
+			}
 		}
 	}
 
+	// start a selfbot for every config
 	commandList := commands.InitCommands()
-	bot, err := selfbot.NewSelfbot(config, commandList)
-
-	if err != nil {
-		log.Errorf("Error creating selfbot: %s", err)
-		return
+	var selfbotList []selfbot.Selfbot
+	for i, config := range configs {
+		bot, err := selfbot.NewSelfbot(config, commandList)
+		if err != nil {
+			log.Errorf("Error creating selfbot for config index %d: %s", i, err)
+		}
+		selfbotList = append(selfbotList, bot)
 	}
 
 	// Wait for ctrl c
@@ -88,6 +95,8 @@ func main() {
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
 
-	// Cleanly close down the Discord session.
-	bot.Close()
+	// Cleanly close down all Discord sessions
+	for _, bot := range selfbotList {
+		bot.Close()
+	}
 }
