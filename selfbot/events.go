@@ -27,6 +27,10 @@ func (bot *Selfbot) onMessageCreate(session *discordgo.Session, ev *discordgo.Me
 func (bot *Selfbot) onSendMessage(ev *discordgo.MessageCreate) {
 	content := ev.Message.Content
 
+	if content == "" {
+		return
+	}
+
 	if strings.HasPrefix(content, bot.Config.Prefix) {
 		// remove the prefix from content
 		content = content[len(bot.Config.Prefix):]
