@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 	log "github.com/sirupsen/logrus"
+	"time"
 )
 
 // Selfbot represents all information required to run a selfbot. Multiple selfbots
@@ -58,4 +59,27 @@ func NewSelfbot(config Config, commands CommandList) (Selfbot, error) {
 func (bot *Selfbot) Close() {
 	bot.Log.Debugf("Closing Session")
 	_ = bot.Session.Close()
+}
+
+// sendError sends an error to the current channel and deletes it in 5 seconds
+func (bot *Selfbot) sendError(channelID string, err error) {
+	// if there is a user error, send an embed with the error
+	message, err := bot.Session.ChannelMessageSendComplex(channelID, &discordgo.MessageSend{
+		Embed: &discordgo.MessageEmbed{
+			Title:       "Error",
+			Description: err.Error(),
+			Color:       0xea5455,
+		},
+	})
+	if err != nil {
+		bot.Log.Debugf("Error sending error to channel %s", err)
+	}
+
+	// delete the error message in 5 seconds
+	go func() {
+		time.Sleep(5 * time.Second)
+		if err := bot.Session.ChannelMessageDelete(message.ChannelID, message.ID); err != nil {
+			bot.Log.Errorf("Error deleting error message")
+		}
+	}()
 }

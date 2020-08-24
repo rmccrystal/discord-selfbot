@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"strings"
-	"time"
 )
 
 func (bot *Selfbot) initHandlers() error {
@@ -25,6 +24,13 @@ func (bot *Selfbot) onMessageCreate(session *discordgo.Session, ev *discordgo.Me
 // Called whenever the local User sends a message
 // TODO: Clean up this function
 func (bot *Selfbot) onSendMessage(ev *discordgo.MessageCreate) {
+	defer func(_bot *Selfbot) {
+		if r := recover(); r != nil {
+			bot.Log.Errorf("onSendMessage callback panicked: %s", r)
+			bot.sendError(ev.ChannelID, fmt.Errorf("Panicked while handling command: %v", r))
+		}
+	}(bot)
+
 	content := ev.Message.Content
 
 	if content == "" {
@@ -64,26 +70,7 @@ func (bot *Selfbot) onSendMessage(ev *discordgo.MessageCreate) {
 
 		if userError != nil {
 			bot.Log.Errorf("User error: %s", userError)
-
-			// if there is a user error, send an embed with the error
-			message, err := bot.Session.ChannelMessageSendComplex(ev.ChannelID, &discordgo.MessageSend{
-				Embed: &discordgo.MessageEmbed{
-					Title:       "Error",
-					Description: userError.Error(),
-					Color:       0xea5455,
-				},
-			})
-			if err != nil {
-				bot.Log.Debugf("Error sending error to channel %s", err)
-			}
-
-			// delete the error message in 5 seconds
-			go func() {
-				time.Sleep(5 * time.Second)
-				if err := bot.Session.ChannelMessageDelete(message.ChannelID, message.ID); err != nil {
-					bot.Log.Errorf("Error deleting error message")
-				}
-			}()
+			bot.sendError(ev.ChannelID, userError)
 		}
 	}
 }
