@@ -57,7 +57,7 @@ func NewSelfbot(config Config, commands CommandList) (Selfbot, error) {
 }
 
 func (bot *Selfbot) Close() {
-	bot.Log.Debugf("Closing Session")
+	bot.Log.Infoln("Closing Session")
 	_ = bot.Session.Close()
 }
 

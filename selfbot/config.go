@@ -33,7 +33,21 @@ func NewConfigFromJson(jsonBytes []byte) (Config, error) {
 }
 
 func NewConfigsFromJson(jsonBytes []byte) ([]Config, error) {
+	// since we can't read the array directly because we can't use default
+	// values, we're going to unmarshal twice; once for getting the length
+	// and another time to use the default config
+	var _configs []Config
+	if err := json.Unmarshal(jsonBytes, &_configs); err != nil {
+		return nil, err
+	}
+	configCount := len(_configs)
+
+	// Populate the configs with default configs
 	var configs []Config
+	for i := 0; i < configCount; i++ {
+		configs = append(configs, NewConfigDefault(""))
+	}
+
 	if err := json.Unmarshal(jsonBytes, &configs); err != nil {
 		return nil, err
 	}

@@ -12,6 +12,7 @@ import (
 	"os"
 	"os/signal"
 	"strings"
+	"sync"
 	"syscall"
 )
 
@@ -83,11 +84,14 @@ func main() {
 	commandList := commands.InitCommands()
 	var selfbotList []selfbot.Selfbot
 	for i, config := range configs {
-		bot, err := selfbot.NewSelfbot(config, commandList)
-		if err != nil {
-			log.Errorf("Error creating selfbot for config index %d: %s", i, err)
-		}
-		selfbotList = append(selfbotList, bot)
+		config := config
+		go func() {
+			bot, err := selfbot.NewSelfbot(config, commandList)
+			if err != nil {
+				log.Errorf("Error creating selfbot for config index %d: %s", i, err)
+			}
+			selfbotList = append(selfbotList, bot)
+		}()
 	}
 
 	// Wait for ctrl c
@@ -95,8 +99,17 @@ func main() {
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
 
+
+	var wg sync.WaitGroup
 	// Cleanly close down all Discord sessions
 	for _, bot := range selfbotList {
-		bot.Close()
+		bot := bot
+		wg.Add(1)
+		go func() {
+			bot.Close()
+			wg.Done()
+		}()
 	}
+
+	wg.Wait()
 }
