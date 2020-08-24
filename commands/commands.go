@@ -13,7 +13,6 @@ func InitCommands() selfbot.CommandList {
 		Run:         deleteCommand,
 		Description: "Deletes the past n commands",
 		Usage:       "delete [messageCount]",
-		MinArgs:     0,
 	})
 	list.AddCommand(selfbot.Command{
 		Name:        "ascii",
@@ -37,7 +36,6 @@ func InitCommands() selfbot.CommandList {
 		Run:         clearCommand,
 		Description: "Sends x blank lines to the channel. Defaults to 60",
 		Usage:       "clear [lines]",
-		MinArgs:     0,
 	})
 
 	list.AddCommand(selfbot.Command{
