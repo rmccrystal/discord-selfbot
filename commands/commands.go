@@ -31,6 +31,14 @@ func InitCommands() selfbot.CommandList {
 		Usage:       "react <text>",
 		MinArgs:     1,
 	})
+	list.AddCommand(selfbot.Command{
+		Name:        "clear",
+		Aliases:     []string{"c"},
+		Run:         clearCommand,
+		Description: "Sends x blank lines to the channel. Defaults to 60",
+		Usage:       "clear [lines]",
+		MinArgs:     0,
+	})
 
 	list.AddCommand(selfbot.Command{
 		Name:        "help",

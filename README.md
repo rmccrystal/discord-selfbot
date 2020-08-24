@@ -49,6 +49,14 @@ Usage: `react <text>`
 
 Aliases: `r`
 
+### `clear`
+
+Description: `Sends x blank lines to the channel. Defaults to 60`
+
+Usage: `clear [lines]`
+
+Aliases: `c`
+
 ### `help`
 
 Description: `Prints help about all commands or about a specific command`

@@ -10,6 +10,44 @@ import (
 	"strings"
 )
 
+func clearCommand(bot *selfbot.Selfbot, args []string, message *discordgo.Message) (userError, discordError error) {
+	seperatorText := "***"
+	var totalLines int
+	if len(args) > 0 {
+		totalLines, _ = strconv.Atoi(args[0])
+	}
+	// default to 60 totalLines
+	if totalLines == 0 {
+		totalLines = 60
+	}
+
+	var maxLinesPerMessage = 2000 - (len(seperatorText) * 2)
+
+	sentLines := 0
+	// send messages in chunks so we can send over 2000 lines
+	for sentLines < totalLines {
+		// how many lines we're sending this iteration
+		lines := totalLines - sentLines
+
+		// clamp lines
+		if lines > maxLinesPerMessage {
+			lines = maxLinesPerMessage
+		}
+
+		msg := seperatorText + strings.Repeat("\n", lines) + seperatorText
+		_, discordError = bot.Session.ChannelMessageSend(
+			message.ChannelID,
+			msg,
+		)
+		if discordError != nil {
+			return
+		}
+
+		sentLines += lines
+	}
+	return
+}
+
 func reactCommand(bot *selfbot.Selfbot, args []string, message *discordgo.Message) (userError, discordError error) {
 	// get latest message
 	messageHistory, err := bot.Session.ChannelMessages(message.ChannelID, 100, "", "", "")
