@@ -8,7 +8,7 @@ A Discord selfbot written in GoLang
 * Under `Request Headers` find the `authorization` key
 * Copy the value
 
-[Screenshot](https://prnt.sc/u4pdmp)
+[Screenshot](https://prnt.sc/u4pfns)
 
 ## Installation
 ### Using `go get`
