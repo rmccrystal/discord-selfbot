@@ -1,6 +1,7 @@
 # Discord Selfbot
 A Discord selfbot written in GoLang
 
+# Installation
 ## Getting your token
 * On your Discord, press Ctrl + Shift + I to open devtools
 * Go to the network tab on the top
@@ -9,8 +10,7 @@ A Discord selfbot written in GoLang
 * Copy the value
 
 [Screenshot](https://prnt.sc/u4pfns)
-
-## Installation
+## Running the selfbot
 ### Using `go get`
 If not already installed, download [Go](https://golang.org/dl/)
 
@@ -25,6 +25,9 @@ selfbot
 Enter your auth key when prompted. It will automatically generate a config
 file with your token so you don't have to enter it every time. Make sure
 you are in the same directory every time you run it.
+
+### Using docker
+TODO
 
 ## List of commands
 ### `delete`
