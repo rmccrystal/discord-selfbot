@@ -64,3 +64,24 @@ Description: `Prints help about all commands or about a specific command`
 Usage: `help [command]`
 
 Aliases: `h`
+
+## Using multiple configs
+If you would like to host multiple users at once, change your config.json
+file to an array of config objects. For example:
+
+```json
+[
+  {
+    "token": "token1"
+  },
+  {
+    "token": "token2",
+    "prefix": "!"
+  },
+  {
+    "token": "token3",
+  }
+]
+```
+
+This would create three selfbot instances with the three specified configs.
