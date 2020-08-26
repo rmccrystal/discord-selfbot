@@ -77,6 +77,11 @@ func (bot *Selfbot) sendError(channelID string, err error) {
 
 	// delete the error message in 5 seconds
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				bot.Log.Errorf("Panic while deleting error message: %s", r)
+			}
+		}()
 		time.Sleep(5 * time.Second)
 		if err := bot.Session.ChannelMessageDelete(message.ChannelID, message.ID); err != nil {
 			bot.Log.Errorf("Error deleting error message")

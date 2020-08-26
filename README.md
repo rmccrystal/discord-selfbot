@@ -29,7 +29,7 @@ you are in the same directory every time you run it.
 ### Using docker
 TODO
 
-## List of commands
+# List of commands
 ### `delete`
 
 Description: `Deletes the past n commands`
