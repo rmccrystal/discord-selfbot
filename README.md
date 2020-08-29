@@ -60,6 +60,20 @@ Usage: `clear [lines]`
 
 Aliases: `c`
 
+### `clearPins`
+
+Description: `Clears the oldest x pinned messages in the current channel or all pinned messages if no arguments are specified`
+
+Usage: `clearPins [messages]`
+
+Aliases: `unpin`
+
+### `restorePins`
+
+Description: `Restores all pinned messages deleted by the clearPins command`
+
+Usage: `restorePins`
+
 ### `help`
 
 Description: `Prints help about all commands or about a specific command`
