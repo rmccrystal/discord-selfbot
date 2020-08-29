@@ -70,7 +70,7 @@ func (bot *Selfbot) onSendMessage(ev *discordgo.MessageCreate) {
 		}
 
 		if userError != nil {
-			bot.Log.Errorf("User error: %s", userError)
+			bot.Log.Debugf("User error: %s", userError)
 			bot.sendError(ev.ChannelID, userError)
 		}
 	}
