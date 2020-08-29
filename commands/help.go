@@ -20,10 +20,8 @@ func helpCommand(bot *selfbot.Selfbot, args []string, message *discordgo.Message
 		Embed: &discordgo.MessageEmbed{
 			Title:  "Help",
 			Color:  0x4281A4,
-			Footer: &discordgo.MessageEmbedFooter{
-				Text: "by draven#4562\ngithub.com/rmccrystal/discord-selfbot",
-			},
 			Fields: field,
+			Footer: selfbot.Footer,
 		},
 	})
 

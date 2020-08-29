@@ -3,6 +3,7 @@ package selfbot
 import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"runtime/debug"
 	"strings"
 )
 
@@ -26,7 +27,7 @@ func (bot *Selfbot) onMessageCreate(session *discordgo.Session, ev *discordgo.Me
 func (bot *Selfbot) onSendMessage(ev *discordgo.MessageCreate) {
 	defer func(_bot *Selfbot) {
 		if r := recover(); r != nil {
-			bot.Log.Errorf("onSendMessage callback panicked: %s", r)
+			bot.Log.Errorf("onSendMessage callback panicked: %s\n%s", r, string(debug.Stack()))
 			bot.sendError(ev.ChannelID, fmt.Errorf("Panicked while handling command: %v", r))
 		}
 	}(bot)

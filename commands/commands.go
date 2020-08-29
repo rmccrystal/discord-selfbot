@@ -37,6 +37,19 @@ func InitCommands() selfbot.CommandList {
 		Description: "Sends x blank lines to the channel. Defaults to 60",
 		Usage:       "clear [lines]",
 	})
+	list.AddCommand(selfbot.Command{
+		Name: "clearPins",
+		Run:  clearPinsCommand,
+		Aliases: []string{"unpin"},
+		Description: "Clears the oldest x pinned messages in the current channel or all pinned messages if no arguments are specified",
+		Usage: "clearPins [messages]",
+	})
+	list.AddCommand(selfbot.Command{
+		Name: "restorePins",
+		Run: restorePinsCommand,
+		Description: "Restores all pinned messages deleted by the clearPins command",
+		Usage: "restorePins",
+	})
 
 	list.AddCommand(selfbot.Command{
 		Name:        "help",

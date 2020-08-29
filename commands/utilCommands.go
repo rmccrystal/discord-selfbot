@@ -10,6 +10,93 @@ import (
 	"strings"
 )
 
+func clearPinsCommand(bot *selfbot.Selfbot, args []string, message *discordgo.Message) (userError, discordError error) {
+	messages, err := bot.Session.ChannelMessagesPinned(message.ChannelID)
+	if err != nil {
+		return nil, err
+	}
+
+	messagesToDelete := 50
+	if len(args) >= 1 {
+		messagesToDelete, err = strconv.Atoi(args[0])
+		if err != nil {
+			return fmt.Errorf("%s is not a valid number", args[0]), nil
+		}
+	}
+
+	unpinnedMessages := 0
+	// iterate over messages in reverse order
+	for i := len(messages); i > 0; i-- {
+		i := i - 1
+
+		if unpinnedMessages >= messagesToDelete {
+			break
+		}
+
+		if err := bot.Session.ChannelMessageUnpin(messages[i].ChannelID, messages[i].ID); err != nil {
+			return nil, err
+		}
+		// cache the pins in case we want to restore them
+		bot.RemovedPins = append(bot.RemovedPins, *messages[i])
+
+		bot.Log.WithFields(logrus.Fields{
+			"content":   messages[i].Content,
+			"messageID": messages[i].ID,
+			"channelID": messages[i].ChannelID,
+		}).Debugf("Unpinned message")
+		unpinnedMessages++
+	}
+
+	if err := bot.SendInfo(message.ChannelID, fmt.Sprintf("Unpinned %d messages", unpinnedMessages)); err != nil {
+		return nil, err
+	}
+
+	return nil, nil
+}
+
+func restorePinsCommand(bot *selfbot.Selfbot, args []string, message *discordgo.Message) (userError, discordError error) {
+	var messages []discordgo.Message
+	for _, msg := range bot.RemovedPins {
+		if msg.ChannelID == message.ChannelID {
+			messages = append(messages, msg)
+		}
+	}
+
+	if len(messages) == 0 {
+		return fmt.Errorf("There are no cached unpinned messages for this channel"), nil
+	}
+
+	restoredPinsCount := 0
+
+	for _, msg := range messages {
+		if err := bot.Session.ChannelMessagePin(msg.ChannelID, msg.ID); err != nil {
+			return nil, err
+		}
+
+		// Remove the message from bot.RemovedPins
+		for idx, pin := range bot.RemovedPins {
+			if pin.ID == msg.ID {
+				bot.RemovedPins = append(bot.RemovedPins[:idx], bot.RemovedPins[idx+1:]...)
+				break
+			}
+		}
+
+		restoredPinsCount++
+
+		bot.Log.WithFields(logrus.Fields{
+			"content":   msg.Content,
+			"messageID": msg.ID,
+			"channelID": msg.ChannelID,
+		}).Debugf("Restored pinned message")
+	}
+
+	if err := bot.SendInfo(message.ChannelID, fmt.Sprintf("Restored %d pins", restoredPinsCount)); err != nil {
+		return nil, err
+	}
+
+	return nil, nil
+}
+
 func clearCommand(bot *selfbot.Selfbot, args []string, message *discordgo.Message) (userError, discordError error) {
 	seperatorText := "***"
 	var totalLines int

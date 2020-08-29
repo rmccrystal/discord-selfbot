@@ -15,6 +15,11 @@ type Selfbot struct {
 	Config      Config
 	CommandList CommandList
 	Log         *log.Entry
+	RemovedPins []discordgo.Message
+}
+
+var Footer = &discordgo.MessageEmbedFooter{
+	Text: "by draven#4562\ngithub.com/rmccrystal/discord-selfbot",
 }
 
 func NewSelfbot(config Config, commands CommandList) (Selfbot, error) {
@@ -69,6 +74,7 @@ func (bot *Selfbot) sendError(channelID string, err error) {
 			Title:       "Error",
 			Description: err.Error(),
 			Color:       0xea5455,
+			Footer:      Footer,
 		},
 	})
 	if err != nil {
@@ -87,4 +93,17 @@ func (bot *Selfbot) sendError(channelID string, err error) {
 			bot.Log.Errorf("Error deleting error message")
 		}
 	}()
+}
+
+func (bot *Selfbot) SendInfo(channelID, info string) error {
+	// if there is a user error, send an embed with the error
+	_, err := bot.Session.ChannelMessageSendComplex(channelID, &discordgo.MessageSend{
+		Embed: &discordgo.MessageEmbed{
+			Title:       "Info",
+			Description: info,
+			Color:       0x48bfe3,
+			Footer:      Footer,
+		},
+	})
+	return err
 }
