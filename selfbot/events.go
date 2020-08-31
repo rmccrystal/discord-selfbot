@@ -15,7 +15,7 @@ func (bot *Selfbot) initHandlers() error {
 }
 
 // Called when any User sends a message in any channel
-func (bot *Selfbot) onMessageCreate(session *discordgo.Session, ev *discordgo.MessageCreate) {
+func (bot *Selfbot) onMessageCreate(_ *discordgo.Session, ev *discordgo.MessageCreate) {
 	if ev.Author.ID == bot.User.ID {
 		bot.onSendMessage(ev)
 		return
@@ -38,9 +38,20 @@ func (bot *Selfbot) onSendMessage(ev *discordgo.MessageCreate) {
 		return
 	}
 
+	// Handle interactive session
+	if bot.interactiveSession != nil {
+		if handleNext := bot.interactiveSession.handleSendMessage(ev); handleNext == false {
+			return
+		}
+	}
+
 	if strings.HasPrefix(content, bot.Config.Prefix) {
 		// remove the prefix from content
 		content = content[len(bot.Config.Prefix):]
+
+		if len(content) == 0 {
+			return
+		}
 
 		// if the first character is space, we don't want to interpret the input as a command
 		if content[0] == ' ' {

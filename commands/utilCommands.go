@@ -47,7 +47,7 @@ func clearPinsCommand(bot *selfbot.Selfbot, args []string, message *discordgo.Me
 		unpinnedMessages++
 	}
 
-	if err := bot.SendInfo(message.ChannelID, fmt.Sprintf("Unpinned %d messages", unpinnedMessages)); err != nil {
+	if err := bot.SendInfo(message.ChannelID, fmt.Sprintf("Unpinned %d messages", unpinnedMessages), true); err != nil {
 		return nil, err
 	}
 
@@ -90,7 +90,7 @@ func restorePinsCommand(bot *selfbot.Selfbot, args []string, message *discordgo.
 		}).Debugf("Restored pinned message")
 	}
 
-	if err := bot.SendInfo(message.ChannelID, fmt.Sprintf("Restored %d pins", restoredPinsCount)); err != nil {
+	if err := bot.SendInfo(message.ChannelID, fmt.Sprintf("Restored %d pins", restoredPinsCount), true); err != nil {
 		return nil, err
 	}
 

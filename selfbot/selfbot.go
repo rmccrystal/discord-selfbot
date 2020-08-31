@@ -10,12 +10,13 @@ import (
 // Selfbot represents all information required to run a selfbot. Multiple selfbots
 // can be created with this struct
 type Selfbot struct {
-	Session     *discordgo.Session
-	User        *discordgo.User
-	Config      Config
-	CommandList CommandList
-	Log         *log.Entry
-	RemovedPins []discordgo.Message
+	Session            *discordgo.Session
+	User               *discordgo.User
+	Config             Config
+	CommandList        CommandList
+	Log                *log.Entry
+	RemovedPins        []discordgo.Message
+	interactiveSession *Interactive
 }
 
 var Footer = &discordgo.MessageEmbedFooter{
@@ -95,15 +96,27 @@ func (bot *Selfbot) sendError(channelID string, err error) {
 	}()
 }
 
-func (bot *Selfbot) SendInfo(channelID, info string) error {
-	// if there is a user error, send an embed with the error
-	_, err := bot.Session.ChannelMessageSendComplex(channelID, &discordgo.MessageSend{
-		Embed: &discordgo.MessageEmbed{
-			Title:       "Info",
-			Description: info,
-			Color:       0x48bfe3,
-			Footer:      Footer,
-		},
-	})
+func (bot *Selfbot) SendInfo(channelID, info string, clean bool) error {
+	var err error
+	if clean {
+		_, err = bot.Session.ChannelMessageSendComplex(channelID, &discordgo.MessageSend{
+			Embed: &discordgo.MessageEmbed{
+				Title:       info,
+				Color:       0x48bfe3,
+			},
+		})
+	} else {
+		_, err = bot.Session.ChannelMessageSendComplex(channelID, &discordgo.MessageSend{
+			Embed: &discordgo.MessageEmbed{
+				Title:       "Info",
+				Description: info,
+				Color:       0x48bfe3,
+				Footer:      Footer,
+			},
+		})
+	}
+	if err != nil {
+		bot.Log.Errorf("Error printing info to channel: %s", err)
+	}
 	return err
 }
