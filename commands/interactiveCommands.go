@@ -7,21 +7,6 @@ import (
 	"net"
 )
 
-func testInteractiveCommand(bot *selfbot.Selfbot, args []string, message *discordgo.Message) (userError, discordError error) {
-	interactive := bot.StartInteractive(message.ChannelID, false)
-	for {
-		msg, eof := interactive.ReadString()
-		if eof {
-			break
-		}
-
-		if eof := interactive.WriteString(msg); eof {
-			break
-		}
-	}
-	return
-}
-
 func netcatCommand(bot *selfbot.Selfbot, args []string, message *discordgo.Message) (userError, discordError error) {
 	conn, err := net.Dial("tcp", args[0])
 	if err != nil {

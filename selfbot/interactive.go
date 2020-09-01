@@ -42,7 +42,7 @@ func (bot *Selfbot) StartInteractive(channelID string, consumeMessages bool) *In
 	go session.sendThread()
 
 	bot.interactiveSession = session
-	_ = bot.SendInfo(channelID, "Started a new interactive session", true)
+	_ = bot.SendInfo(channelID, fmt.Sprintf("Started a new interactive session. Send %s to end", bot.Config.Prefix), true)
 	bot.Log.Debugln("Started a new interactive session")
 	return session
 }

@@ -51,12 +51,10 @@ func InitCommands() selfbot.CommandList {
 		Usage: "restorePins",
 	})
 	list.AddCommand(selfbot.Command{
-		Name: "test",
-		Run: testInteractiveCommand,
-	})
-	list.AddCommand(selfbot.Command{
 		Name: "nc",
 		Run: netcatCommand,
+		Aliases: []string{"netcat"},
+		Description: "An interactive TCP session",
 		MinArgs: 1,
 	})
 
