@@ -55,7 +55,7 @@ func InitCommands() selfbot.CommandList {
 		Aliases: []string{"netcat"},
 		Description: "An interactive TCP session",
 		MinArgs: 1,
-		Usage: "nc <address:port>"
+		Usage: "nc <address:port>",
 	})
 
 	list.AddCommand(selfbot.Command{
