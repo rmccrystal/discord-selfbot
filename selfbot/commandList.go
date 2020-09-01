@@ -45,6 +45,10 @@ func (list *CommandList) AddCommand(command Command) {
 		}
 	}
 
+	if command.Usage == "" {
+		command.Usage = command.Name
+	}
+
 	// add command to the list
 	list.Commands = append(list.Commands, command)
 }

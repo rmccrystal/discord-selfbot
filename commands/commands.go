@@ -48,7 +48,6 @@ func InitCommands() selfbot.CommandList {
 		Name: "restorePins",
 		Run: restorePinsCommand,
 		Description: "Restores all pinned messages deleted by the clearPins command",
-		Usage: "restorePins",
 	})
 	list.AddCommand(selfbot.Command{
 		Name: "nc",
