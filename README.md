@@ -74,6 +74,20 @@ Description: `Restores all pinned messages deleted by the clearPins command`
 
 Usage: `restorePins`
 
+### `calc`
+
+Description: `Calculates a mathematical expression`
+
+Usage: `calc`
+
+### `nc`
+
+Description: `An interactive TCP session`
+
+Usage: `nc <address:port>`
+
+Aliases: `netcat`
+
 ### `help`
 
 Description: `Prints help about all commands or about a specific command`
@@ -81,6 +95,7 @@ Description: `Prints help about all commands or about a specific command`
 Usage: `help [command]`
 
 Aliases: `h`
+
 
 ## Using multiple configs
 If you would like to host multiple users at once, change your config.json
@@ -96,7 +111,7 @@ file to an array of config objects. For example:
     "prefix": "!"
   },
   {
-    "token": "token3",
+    "token": "token3"
   }
 ]
 ```
