@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"github.com/Maldris/mathparse"
 	"github.com/bwmarrin/discordgo"
 	"github.com/common-nighthawk/go-figure"
 	"github.com/rmccrystal/discord-selfbot/selfbot"
@@ -54,7 +55,7 @@ func clearPinsCommand(bot *selfbot.Selfbot, args []string, message *discordgo.Me
 	return nil, nil
 }
 
-func restorePinsCommand(bot *selfbot.Selfbot, args []string, message *discordgo.Message) (userError, discordError error) {
+func restorePinsCommand(bot *selfbot.Selfbot, _ []string, message *discordgo.Message) (userError, discordError error) {
 	var messages []discordgo.Message
 	for _, msg := range bot.RemovedPins {
 		if msg.ChannelID == message.ChannelID {
@@ -249,5 +250,17 @@ func deleteCommand(bot *selfbot.Selfbot, args []string, message *discordgo.Messa
 		}
 	}
 
+	return nil, nil
+}
+
+func calcCommand(bot *selfbot.Selfbot, args []string, message *discordgo.Message) (userError, err error) {
+	equation := strings.Join(args, " ")
+	parser := mathparse.NewParser(equation)
+	parser.Resolve()
+	result := fmt.Sprintf("%s = %s", equation, parser.GetExpressionResult())
+
+	if err := bot.SendInfo(message.ChannelID, fmt.Sprintf("`%s`", result), true); err != nil {
+		return nil, err
+	}
 	return nil, nil
 }

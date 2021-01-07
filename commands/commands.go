@@ -1,6 +1,8 @@
 package commands
 
-import "github.com/rmccrystal/discord-selfbot/selfbot"
+import (
+	"github.com/rmccrystal/discord-selfbot/selfbot"
+)
 
 // InitCommands creates a command list which is used by the selfbot.
 // All commands should be added to the command list here
@@ -38,24 +40,29 @@ func InitCommands() selfbot.CommandList {
 		Usage:       "clear [lines]",
 	})
 	list.AddCommand(selfbot.Command{
-		Name: "clearPins",
-		Run:  clearPinsCommand,
-		Aliases: []string{"unpin"},
+		Name:        "clearPins",
+		Run:         clearPinsCommand,
+		Aliases:     []string{"unpin"},
 		Description: "Clears the oldest x pinned messages in the current channel or all pinned messages if no arguments are specified",
-		Usage: "clearPins [messages]",
+		Usage:       "clearPins [messages]",
 	})
 	list.AddCommand(selfbot.Command{
-		Name: "restorePins",
-		Run: restorePinsCommand,
+		Name:        "restorePins",
+		Run:         restorePinsCommand,
 		Description: "Restores all pinned messages deleted by the clearPins command",
 	})
 	list.AddCommand(selfbot.Command{
-		Name: "nc",
-		Run: netcatCommand,
-		Aliases: []string{"netcat"},
+		Name:        "calc",
+		Run:         calcCommand,
+		Description: "Calculates a mathematical expression",
+	})
+	list.AddCommand(selfbot.Command{
+		Name:        "nc",
+		Run:         netcatCommand,
+		Aliases:     []string{"netcat"},
 		Description: "An interactive TCP session",
-		MinArgs: 1,
-		Usage: "nc <address:port>",
+		MinArgs:     1,
+		Usage:       "nc <address:port>",
 	})
 
 	list.AddCommand(selfbot.Command{
